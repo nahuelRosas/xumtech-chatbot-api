@@ -1,0 +1,9 @@
+onlyBuiltDependencies:
+  - '@firebase/util'
+  - '@nestjs/core'
+  - '@scarf/scarf'
+  - canvas
+  - esbuild
+  - protobufjs
+  - puppeteer
+  - unrs-resolver
