@@ -14,6 +14,7 @@ import { MastraLanguageModel } from '@mastra/core';
 import { CreateChatDto } from '../dto/create-chat.dto';
 import z from 'zod';
 import { stepCountIs } from 'ai';
+import { uuid } from 'zod/v4';
 
 const outputSchema = z.object({
   text: z.string(),
@@ -61,16 +62,11 @@ export class MastraService {
         .generateVNext<
           typeof outputSchema
         >([{ role: 'user', content: message }], {
-          context: [{ role: 'assistant', content: assistantPrompt }],
-          resourceId: resourceId || 'anon',
-          threadId: conversationId,
+          context: [{ role: 'system', content: assistantPrompt }],
+          resourceId: resourceId || String(uuid()),
+          threadId: conversationId || String(uuid()),
           output: outputSchema,
           stopWhen: stepCountIs(50),
-          modelSettings: {
-            temperature: 0.5,
-            maxOutputTokens: 20000,
-            topP: 0.8,
-          },
           inputProcessors: [
             new UnicodeNormalizer({
               stripControlChars: true,
