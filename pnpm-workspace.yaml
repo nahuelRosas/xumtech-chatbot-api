@@ -4,6 +4,7 @@ onlyBuiltDependencies:
   - '@scarf/scarf'
   - canvas
   - esbuild
+  - onnxruntime-node
   - protobufjs
   - puppeteer
   - unrs-resolver
