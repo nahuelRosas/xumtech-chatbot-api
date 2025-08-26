@@ -13,9 +13,7 @@ import {
   AuthenticationService,
 } from '../application/service/authentication.service';
 import { ResponseService } from 'src/common/response_service/service/response.service';
-import { ENVIRONMENT } from 'src/common/base/enum/common.enum';
 import { IS_PUBLIC_KEY } from '../decorators/public.decorator';
-import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class AuthenticationGuard implements CanActivate {
@@ -24,7 +22,6 @@ export class AuthenticationGuard implements CanActivate {
     private readonly responseService: ResponseService,
     @Inject(AUTHENTICATION_SERVICE)
     private readonly firebaseAuthService: AuthenticationService,
-    private readonly configService: ConfigService,
     private reflector: Reflector,
   ) {
     this.responseService.setContext(AuthenticationGuard.name);
@@ -40,20 +37,12 @@ export class AuthenticationGuard implements CanActivate {
       return true;
     }
 
-    if (this.isDevelopmentEnvironment()) {
-      return true;
-    }
     const request: Request = context.switchToHttp().getRequest();
     const token = this.extractTokenFromHeader(request);
 
     return await this.validateAuthenticationToken(token, request);
   }
 
-  private isDevelopmentEnvironment(): boolean {
-    return (
-      this.configService.get<string>('NODE_ENV') === ENVIRONMENT.DEVELOPMENT
-    );
-  }
   private extractTokenFromHeader(request: Request): string {
     const authHeader = request.headers.authorization;
     if (!authHeader?.startsWith('Bearer ')) {
@@ -68,7 +57,9 @@ export class AuthenticationGuard implements CanActivate {
   ): Promise<boolean> {
     try {
       const decodedToken = await this.firebaseAuthService.validateToken(token);
-      request['user'] = decodedToken;
+
+      request['user'] = decodedToken.payload;
+
       return true;
     } catch (error) {
       this.responseService.errorHandler({ error });
