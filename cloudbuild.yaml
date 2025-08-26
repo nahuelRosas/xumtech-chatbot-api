@@ -1,0 +1,91 @@
+steps:
+  - name: 'gcr.io/cloud-builders/docker'
+    id: Build Custom Builder
+    args:
+      [
+        'build',
+        '-t',
+        '${_LOCATION}-docker.pkg.dev/${PROJECT_ID}/${_SERVICE_NAME}/custom-builder:latest',
+        '-f',
+        'builder.Dockerfile',
+        '.',
+      ]
+  - name: 'gcr.io/cloud-builders/docker'
+    id: Build Custom Run Image
+    args:
+      [
+        'build',
+        '-t',
+        '${_LOCATION}-docker.pkg.dev/${PROJECT_ID}/${_SERVICE_NAME}/custom-run:latest',
+        '-f',
+        'run.Dockerfile',
+        '.',
+      ]
+  - name: node:22
+    id: Install pnpm
+    entrypoint: bash
+    args:
+      - -c
+      - |
+        corepack enable
+        corepack prepare pnpm@latest --activate
+        pnpm install --no-frozen-lockfile
+  - name: gcr.io/cloud-builders/gcloud
+    id: Create Artifact Registry Repository if not exists
+    entrypoint: /bin/bash
+    args:
+      - '-c'
+      - |
+        if ! gcloud artifacts repositories describe ${_SERVICE_NAME} --location=${_LOCATION}; then
+          gcloud artifacts repositories create ${_SERVICE_NAME} --repository-format=docker --location=${_LOCATION};
+        fi
+  - name: 'gcr.io/cloud-builders/docker'
+    id: Push Custom Builder
+    args:
+      [
+        'push',
+        '${_LOCATION}-docker.pkg.dev/${PROJECT_ID}/${_SERVICE_NAME}/custom-builder:latest',
+      ]
+  - name: 'gcr.io/cloud-builders/docker'
+    id: Push Custom Run Image
+    args:
+      [
+        'push',
+        '${_LOCATION}-docker.pkg.dev/${PROJECT_ID}/${_SERVICE_NAME}/custom-run:latest',
+      ]
+  - name: 'gcr.io/k8s-skaffold/pack'
+    id: Build Application Image with Pack
+    args:
+      [
+        'build',
+        '${_LOCATION}-docker.pkg.dev/${PROJECT_ID}/${_SERVICE_NAME}/${_SERVICE_NAME}:$COMMIT_SHA',
+        '--builder',
+        '${_LOCATION}-docker.pkg.dev/${PROJECT_ID}/${_SERVICE_NAME}/custom-builder:latest',
+        '--run-image',
+        '${_LOCATION}-docker.pkg.dev/${PROJECT_ID}/${_SERVICE_NAME}/custom-run:latest',
+        '--path',
+        '.',
+        '--publish',
+      ]
+  - name: 'gcr.io/cloud-builders/gcloud:latest'
+    id: Deploy to Cloud Run
+    entrypoint: /bin/bash
+    args:
+      - '-c'
+      - |
+        gcloud run deploy ${_SERVICE_NAME} \
+          --image ${_LOCATION}-docker.pkg.dev/${PROJECT_ID}/${_SERVICE_NAME}/${_SERVICE_NAME}:$COMMIT_SHA \
+          --region ${_LOCATION} \
+          --allow-unauthenticated \
+          --service-account default@${PROJECT_ID}.iam.gserviceaccount.com \
+images:
+  - '${_LOCATION}-docker.pkg.dev/${PROJECT_ID}/${_SERVICE_NAME}/custom-builder:latest'
+  - '${_LOCATION}-docker.pkg.dev/${PROJECT_ID}/${_SERVICE_NAME}/custom-run:latest'
+options:
+  substitutionOption: ALLOW_LOOSE
+  logging: CLOUD_LOGGING_ONLY
+  dynamicSubstitutions: true
+
+tags:
+  - gcp-cloud-build-deploy-cloud-run
+  - gcp-cloud-build-deploy-cloud-run-managed
