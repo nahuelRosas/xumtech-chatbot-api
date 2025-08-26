@@ -65,10 +65,10 @@ export class MastraService {
           resourceId: resourceId || 'anon',
           threadId: conversationId,
           output: outputSchema,
-          stopWhen: stepCountIs(15),
+          stopWhen: stepCountIs(50),
           modelSettings: {
             temperature: 0.5,
-            maxOutputTokens: 10000,
+            maxOutputTokens: 20000,
             topP: 0.8,
           },
           inputProcessors: [
@@ -100,7 +100,7 @@ export class MastraService {
                 },
               ],
               thinkingConfig: {
-                thinkingBudget: 1000,
+                thinkingBudget: 8000,
                 includeThoughts: false,
               },
             },
