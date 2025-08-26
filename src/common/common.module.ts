@@ -2,9 +2,11 @@ import { Global, Module } from '@nestjs/common';
 import { RESPONSE_SERVICE } from './response_service/interface/response.interface';
 import { ResponseService } from './response_service/service/response.service';
 import { APP_FILTER } from '@nestjs/core';
+import { APP_GUARD } from '@nestjs/core';
 import { AllExceptionsFilter } from './response_service/filter/all_exceptions.filter';
 import { ConfigModule } from '@nestjs/config';
 import { EnvConfigService } from './env_config/service/envconfig.service';
+import { GlobalDateLockGuard } from './guards/global-date-lock.guard';
 import { APP_ENVIRONMENT_SERVICE } from './env_config/interface/envconfig.interface';
 import createFirebaseApp from './firebase/application/factory/firebase.factory';
 import {
@@ -36,6 +38,10 @@ import { FirestoreRepository } from './firebase/repository/firestore.repository'
     {
       provide: APP_FILTER,
       useClass: AllExceptionsFilter,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: GlobalDateLockGuard,
     },
     {
       provide: FIRESTORE_REPOSITORY,

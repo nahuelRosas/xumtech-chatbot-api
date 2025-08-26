@@ -93,8 +93,6 @@ export function createGeminiClient(
             } else {
               body.toolConfig.functionCallingConfig.mode = 'ANY';
             }
-          } else {
-            body.generationConfig.responseMimeType = 'text/plain';
           }
 
           modifiedInit = {

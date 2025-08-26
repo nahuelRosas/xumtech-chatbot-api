@@ -1,6 +1,6 @@
 {
   "name": "xumtech-chatbot",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "private": true,
   "main": "dist/main.js",
   "scripts": {
@@ -15,16 +15,19 @@
   },
   "dependencies": {
     "@ai-sdk/google": "^2.0.8",
-    "@ai-sdk/openai": "^2.0.19",
     "@google-cloud/storage": "^7.17.0",
     "@mastra/core": "^0.14.1",
+    "@mastra/fastembed": "^0.10.3",
     "@mastra/libsql": "^0.13.4",
+    "@mastra/memory": "^0.13.1",
+    "@mastra/pg": "^0.14.2",
     "@nestjs/common": "^11.1.6",
     "@nestjs/config": "^4.0.2",
     "@nestjs/core": "^11.1.6",
     "@nestjs/platform-express": "^11.1.6",
     "@nestjs/swagger": "^11.2.0",
     "@types/busboy": "^1.5.4",
+    "ai": "^5.0.23",
     "busboy": "^1.6.0",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.2",
@@ -38,7 +41,7 @@
     "string-similarity-js": "^2.1.4",
     "uuid": "^11.1.0",
     "winston": "^3.17.0",
-    "zod": "^4.1.0"
+    "zod": "^3.25.76"
   },
   "devDependencies": {
     "@eslint/js": "^9.34.0",
