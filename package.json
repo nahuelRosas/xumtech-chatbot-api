@@ -35,7 +35,7 @@
     "express": "^5.1.0",
     "firebase": "^12.1.0",
     "firebase-admin": "^13.4.0",
-    "mastra": "^0.10.23",
+    "mastra": "^0.11.2",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.2",
     "string-similarity-js": "^2.1.4",
