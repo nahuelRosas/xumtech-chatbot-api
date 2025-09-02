@@ -19,7 +19,7 @@
     "@mastra/core": "^0.14.1",
     "@mastra/fastembed": "^0.10.3",
     "@mastra/libsql": "^0.13.4",
-    "@mastra/memory": "^0.13.1",
+    "@mastra/memory": "^0.14.2",
     "@mastra/pg": "^0.14.2",
     "@nestjs/common": "^11.1.6",
     "@nestjs/config": "^4.0.2",
