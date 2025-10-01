@@ -28,6 +28,6 @@ export const createCorsOptions = (
       }
     },
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
-    allowedHeaders: 'Content-Type, Accept, Authorization, x-firebase-appcheck',
+    allowedHeaders: 'Content-Type, Accept, Authorization',
   };
 };

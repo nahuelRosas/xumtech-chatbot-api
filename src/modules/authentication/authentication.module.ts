@@ -4,7 +4,6 @@ import {
   AuthenticationService,
 } from './application/service/authentication.service';
 import { APP_GUARD } from '@nestjs/core';
-import { AppCheckGuard } from './guards/app-check.guard';
 import { AuthenticationGuard } from './guards/authentication.guard';
 
 @Global()
@@ -13,10 +12,6 @@ import { AuthenticationGuard } from './guards/authentication.guard';
     {
       provide: AUTHENTICATION_SERVICE,
       useClass: AuthenticationService,
-    },
-    {
-      provide: APP_GUARD,
-      useClass: AppCheckGuard,
     },
     {
       provide: APP_GUARD,

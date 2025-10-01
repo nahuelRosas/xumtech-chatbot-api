@@ -67,7 +67,7 @@ export class AllExceptionsFilter extends BaseExceptionFilter {
     );
     response.header(
       'Access-Control-Allow-Headers',
-      'Content-Type, Accept, Authorization, x-firebase-appcheck',
+      'Content-Type, Accept, Authorization',
     );
     response.header('Access-Control-Allow-Credentials', 'true');
   }

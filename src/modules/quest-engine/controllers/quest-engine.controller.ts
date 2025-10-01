@@ -10,13 +10,12 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { QuestEngineService } from '../application/service/quest-engine.service';
-import { AppCheckGuard } from 'src/modules/authentication/guards/app-check.guard';
 import { AuthenticationGuard } from 'src/modules/authentication/guards/authentication.guard';
 import { CreateQuestDto } from '../application/dto/create-quest.dto';
 import { UpdateQuestDto } from '../application/dto/update-quest.dto';
 import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
-@UseGuards(AppCheckGuard, AuthenticationGuard)
+@UseGuards(AuthenticationGuard)
 @ApiTags('quests')
 @Controller('quests')
 export class QuestEngineController {
