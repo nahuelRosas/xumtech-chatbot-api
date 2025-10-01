@@ -1,6 +1,5 @@
 import * as net from 'net';
 import { Mastra } from '@mastra/core/mastra';
-import { LibSQLStore } from '@mastra/libsql';
 import { Memory } from '@mastra/memory';
 import { PgVector, PostgresStore } from '@mastra/pg';
 import { fastembed } from '@mastra/fastembed';
@@ -101,10 +100,5 @@ export async function createMastra(
     telemetry: {
       enabled: false,
     },
-    storage: new LibSQLStore({
-      url:
-        environmentConfigService.retrieveSetting<string>('MASTRA_DB_URL') ||
-        ':memory:',
-    }),
   });
 }
